@@ -1,0 +1,5 @@
+3 Commands to Exit Vim
+
+Save and exit: :wq
+Exit without saving: :q!
+Save and exit multiple files: :wqa
