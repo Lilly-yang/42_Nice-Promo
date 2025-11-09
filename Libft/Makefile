@@ -15,18 +15,29 @@ NAME = libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = ft_*.c
-OBJ = $(SRC:.c=.o)
+AR = ar rcs
+RM = rm -f
 
-$(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+
+SRCS = ft_*.c
+OBJ = $(SRCS:.c=.o)
+INCS = libft.h
+
 
 all: $(NAME)
 
+$(NAME): $(OBJ)
+	$(AR) $(NAME) $(OBJS)
+
+%.o: %.c $(INCS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f $(OBJ)
+	$(RM) $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re
