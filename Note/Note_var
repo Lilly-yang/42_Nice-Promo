@@ -1,0 +1,6 @@
+Link ~/.var to sgoinfre
+$ rm -rf ~/.var
+$ ln -s /sgoinfre/lyang/var ~/.var
+
+Check if linked
+ls -ld ~/.var

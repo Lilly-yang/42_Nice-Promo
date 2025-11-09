@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_numeric.c                                :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/08 14:30:34 by lyang             #+#    #+#             */
-/*   Updated: 2025/09/08 14:30:35 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/09 19:46:32 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/09 19:46:33 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_str_is_numeric(char *str)
-{
-	int	i;
+#include "libft.h"
 
-	i = 0;
-	while (str[i] != '\0')
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void			*p;
+	unsigned char	*tmp;
+	size_t			n;
+
+	n = nmemb * size;
+	p = malloc(n);
+	if (p)
 	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
+		tmp = (unsigned char *)p;
+		while (n--)
+			*tmp++ = '0';
 	}
-	return (1);
+	return (p);
 }

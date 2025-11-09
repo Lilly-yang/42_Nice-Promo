@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/08 14:56:54 by lyang             #+#    #+#             */
-/*   Updated: 2025/09/08 14:56:55 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/09 16:35:08 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/09 16:35:42 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_str_is_printable(char *str)
+int	ft_strncmp(char *s1, char *s2, unsigned int n)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] < 32 || str[i] > 126)
-			return (0);
+	while (i < n && s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
-	}
-	return (1);
+	if (i == n)
+		return (0);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
