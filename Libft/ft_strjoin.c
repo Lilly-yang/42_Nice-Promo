@@ -5,76 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/15 14:15:48 by lyang             #+#    #+#             */
-/*   Updated: 2025/09/15 14:15:48 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/11 16:41:20 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/11 16:41:22 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-int	ft_strlen(char *str)
+static void	*ft_strcat_wo_end(char *dest, const char *src, int start)
 {
-	int	i;
+	size_t	i;
+	size_t	len;
 
+	len = ft_strlen((char *)src);
 	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-char	*ft_strcat(char *dest, char *src)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (dest[i] != '\0')
-		i++;
-	while (src[j] != '\0')
+	while (i < len)
 	{
-		dest[i] = src[j];
+		dest[start + i] = src[i];
 		i++;
-		j++;
 	}
-	dest[i] = '\0';
 	return (dest);
 }
 
-char	*if_size_0(void)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*s;
+	char	*joined_str;
+	size_t	len1;
+	size_t	len2;
 
-	s = (char *)malloc(1);
-	if (s)
-		s[0] = '\0';
-	return (s);
-}
-
-char	*ft_strjoin(int size, char **strs, char *sep)
-{
-	char	*s;
-	int		i;
-	int		len;
-
-	if (size <= 0)
-		return (if_size_0());
-	i = 0;
-	len = 0;
-	while (i < size)
-		len += ft_strlen(strs[i++]);
-	len += ft_strlen(sep) * (size - 1);
-	s = (char *)malloc(len + 1);
-	if (!s)
-		return (0);
-	s[0] = '\0';
-	i = 0;
-	while (i < size)
-	{
-		ft_strcat(s, strs[i]);
-		if (i < size - 1)
-			ft_strcat(s, sep);
-		i++;
-	}
-	return (s);
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen((char *)s1);
+	len2 = ft_strlen((char *)s2);
+	joined_str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!joined_str)
+		return (NULL);
+	ft_strcat_wo_end(joined_str, s1, 0);
+	ft_strcat_wo_end(joined_str, s2, len1);
+	joined_str[len1 + len2] = '\0';
+	return (joined_str);
 }

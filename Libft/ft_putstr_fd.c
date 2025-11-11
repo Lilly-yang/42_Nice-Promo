@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 19:08:48 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/09 19:08:49 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/11 16:40:20 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/11 16:40:22 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	ft_putstr_fd(char *s, int fd)
 {
-	while (*s)
-	{
-		if (*s == (char)c)
-			return (s);
-		s++;
-	}
-	if (*s == (char)c)
-		return (s);
-	return (NULL);
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
 }

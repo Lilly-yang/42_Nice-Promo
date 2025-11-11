@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 16:38:18 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/11 16:38:20 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/11 16:40:52 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/11 16:40:54 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stdlib.h>
 
-# include <stddef.h>
-# include <stdlib.h>
-# include <unistd.h>
+char	*ft_strdup(char *src)
+{
+	int		i;
+	int		len;
+	char	*dup;
 
-int		ft_str_is_alpha(char *str);
-int		ft_str_is_numeric(char *str);
-size_t	ft_strlen(const char *str);
-char	*ft_strdup(char *src);
-char	*ft_itoa(int n);
-char	*ft_strchr(const char *s, int c);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putchar_fd(char c, int fd);
-
-#endif
+	len = 0;
+	while (src[len])
+		len++;
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (0);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = src[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}

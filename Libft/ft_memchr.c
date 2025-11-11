@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 16:38:18 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/11 16:38:20 by lyang            ###   ########.fr       */
+/*   Created: 2025/11/11 16:39:01 by lyang             #+#    #+#             */
+/*   Updated: 2025/11/11 16:39:02 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include <stddef.h>
-# include <stdlib.h>
-# include <unistd.h>
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	const unsigned char	*p;
 
-int		ft_str_is_alpha(char *str);
-int		ft_str_is_numeric(char *str);
-size_t	ft_strlen(const char *str);
-char	*ft_strdup(char *src);
-char	*ft_itoa(int n);
-char	*ft_strchr(const char *s, int c);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putchar_fd(char c, int fd);
-
-#endif
+	p = (const unsigned char *)s;
+	while (n--)
+	{
+		if (*p == (unsigned char)c)
+			return ((void *)p);
+		p++;
+	}
+	return (NULL);
+}
