@@ -10,16 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(char *str)
+int ft_isdigit(int c)
 {
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	return (1);
+    unsigned char uc = (unsigned char)c;
+    if (uc >= '0' && uc <= '9')
+        return (1);
+    return (0);
 }

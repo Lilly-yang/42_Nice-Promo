@@ -39,12 +39,12 @@ char	*ft_itoa(int n)
 
 	is_negative = 0;
 	num = n;
+	len = num_len(num);
 	if (num < 0)
 	{
 		is_negative = 1;
 		num = -num;
 	}
-	len = num_len(num);
 	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);

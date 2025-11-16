@@ -10,20 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-char	*ft_strdup(char *src)
+char	*ft_strdup(const char *src)
 {
-	int		i;
-	int		len;
-	char	*dup;
+	size_t  i;
+	size_t  len;
+	char    *dup;
 
 	len = 0;
 	while (src[len])
 		len++;
-	dup = (char *)malloc(sizeof(char) * (len + 1));
+	dup = malloc(sizeof(char) * (len + 1));
 	if (!dup)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{

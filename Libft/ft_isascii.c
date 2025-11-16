@@ -10,16 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isascii(char *str)
+int	ft_isascii(int c)
 {
-	int	i;
+	unsigned char	uc;
 
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] < 0 || str[i] > 63)
-			return (0);
-		i++;
-	}
-	return (1);
+	uc = (unsigned char)c;
+	if (uc <= 127)
+		return (1);
+	return (0);
 }

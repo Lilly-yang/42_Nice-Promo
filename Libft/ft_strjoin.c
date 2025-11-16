@@ -12,19 +12,18 @@
 
 #include "libft.h"
 
-static void	*ft_strcat_wo_end(char *dest, const char *src, int start)
+static void	ft_strcat_wo_end(char *dest, const char *src, size_t start)
 {
 	size_t	i;
 	size_t	len;
 
-	len = ft_strlen((char *)src);
+	len = ft_strlen(src);
 	i = 0;
 	while (i < len)
 	{
 		dest[start + i] = src[i];
 		i++;
 	}
-	return (dest);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -37,7 +36,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	len1 = ft_strlen((char *)s1);
 	len2 = ft_strlen((char *)s2);
-	joined_str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	joined_str = malloc(sizeof(char) * (len1 + len2 + 1));
 	if (!joined_str)
 		return (NULL);
 	ft_strcat_wo_end(joined_str, s1, 0);

@@ -10,16 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isprint(char *str)
+int	ft_isprint(int c)
 {
-	int	i;
+	unsigned char uc;
 
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] < 32 || str[i] > 126)
-			return (0);
-		i++;
-	}
-	return (1);
+	uc = (unsigned char)c;
+	if (uc >= 32 && uc <= 126)
+		return (1);
+	return (0);
 }
