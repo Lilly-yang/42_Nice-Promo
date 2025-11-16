@@ -12,7 +12,7 @@
 
 int	ft_isalnum(int c)
 {
-	unsigned char uc;
+	unsigned char	uc;
 
 	uc = (unsigned char)c;
 	if ((uc >= '0' && uc <= '9') || (uc >= 'a' && uc <= 'z')

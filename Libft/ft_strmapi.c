@@ -14,9 +14,9 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char    *result;
-	size_t  i;
-	size_t  len;
+	char	*result;
+	size_t	i;
+	size_t	len;
 
 	if (!s || !f)
 		return (NULL);

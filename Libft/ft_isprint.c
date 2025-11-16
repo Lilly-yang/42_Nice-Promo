@@ -12,7 +12,7 @@
 
 int	ft_isprint(int c)
 {
-	unsigned char uc;
+	unsigned char	uc;
 
 	uc = (unsigned char)c;
 	if (uc >= 32 && uc <= 126)

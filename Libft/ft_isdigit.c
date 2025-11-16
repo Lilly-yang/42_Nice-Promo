@@ -10,10 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
-    unsigned char uc = (unsigned char)c;
-    if (uc >= '0' && uc <= '9')
-        return (1);
-    return (0);
+	unsigned char	uc;
+
+	uc = (unsigned char)c;
+	if (uc >= '0' && uc <= '9')
+		return (1);
+	return (0);
 }

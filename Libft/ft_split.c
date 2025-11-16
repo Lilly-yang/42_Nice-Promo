@@ -35,7 +35,7 @@ static int	count_words(const char *str, char delim)
 
 static char	*ft_cpystr(const char *str, int start, int end)
 {
-	int		 i;
+	int		i;
 	char	*dest;
 
 	dest = (char *)malloc((end - start + 1) * sizeof(char));
@@ -50,7 +50,7 @@ static char	*ft_cpystr(const char *str, int start, int end)
 
 static void	free_array(char **arr, int filled)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (i < filled)
@@ -61,13 +61,26 @@ static void	free_array(char **arr, int filled)
 	free(arr);
 }
 
+static char	*extract_word(char const *s, char c, int *i)
+{
+	int		start;
+	char	*word;
+
+	while (s[*i] && s[*i] == c)
+		(*i)++;
+	start = *i;
+	while (s[*i] && s[*i] != c)
+		(*i)++;
+	word = ft_cpystr(s, start, *i);
+	return (word);
+}
+
 char	**ft_split(char const *s, char c)
 {
 	char	**array;
-	int	 i;
-	int	 element_count;
-	int	 array_i;
-	int	 start;
+	int		i;
+	int		element_count;
+	int		array_i;
 
 	if (!s)
 		return (NULL);
@@ -79,18 +92,12 @@ char	**ft_split(char const *s, char c)
 	array_i = 0;
 	while (array_i < element_count)
 	{
-		while (s[i] && s[i] == c)
-			i++;
-		start = i;
-		while (s[i] && s[i] != c)
-			i++;
-		array[array_i] = ft_cpystr(s, start, i);
-		if (!array[array_i])
+		array[array_i] = extract_word(s, c, &i);
+		if (!array[array_i++])
 		{
-			free_array(array, array_i);
+			free_array(array, array_i - 1);
 			return (NULL);
 		}
-		array_i++;
 	}
 	array[array_i] = NULL;
 	return (array);
