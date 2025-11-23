@@ -6,22 +6,21 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:32:09 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/19 11:53:35 by lyang            ###   ########.fr       */
+/*   Updated: 2025/11/23 17:58:44 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include <stdio.h>
 #include "ft_printf.h"
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-	va_list args;
-	int printed_chars;
-	va_start(args, format);
-	printed_chars = vdprintf(1, format, args);
-	va_end(args);
-	va_end(args);
+	va_list	args;
+	int		total;
 
-	return (printed_chars);
+	if (!format)
+		return (0);
+	va_start(args, format);
+	total = printf_loop(format, &args);
+	va_end(args);
+	return (total);
 }
