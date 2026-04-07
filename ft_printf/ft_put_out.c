@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:23:48 by lyang             #+#    #+#             */
-/*   Updated: 2026/04/06 13:20:21 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/07 11:05:39 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	putptr_out(void *p)
 	int				cnt;
 
 	if (!p)
-		return (putstr_out("0x0"));
+		return (putstr_out("(nil)"));
 	if (write(1, "0x", 2) != 2)
 		return (-1);
 	addr = (unsigned long)(uintptr_t)p;
