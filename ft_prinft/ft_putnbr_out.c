@@ -6,13 +6,13 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:36:10 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/23 17:37:38 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/03 10:03:51 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	putnbr_out(long n)
+int	putnbr_out(long n)
 {
 	char	buf[32];
 	int		i;
@@ -39,7 +39,7 @@ static int	putnbr_out(long n)
 	return (count);
 }
 
-static int	putunbr_out(unsigned long n)
+int	putunbr_out(unsigned long n)
 {
 	char	buf[32];
 	int		i;
@@ -60,7 +60,7 @@ static int	putunbr_out(unsigned long n)
 	return (count);
 }
 
-static int	puthex_out(unsigned long n, int upper)
+int	puthex_out(unsigned long n, int upper)
 {
 	char		buf[32];
 	const char	*digits;

@@ -6,38 +6,40 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:23:48 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/23 17:36:33 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/06 13:20:21 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	putc_out(char c)
+int	putc_out(char c)
 {
 	if (write(1, &c, 1) != 1)
 		return (-1);
 	return (1);
 }
 
-static int	putstr_out(const char *s)
+int	putstr_out(const char *s)
 {
 	size_t	len;
 
 	if (!s)
 		s = "(null)";
-	len = strlen(s);
+	len = 0;
+	while (s[len])
+		len++;
 	if (len && write(1, s, len) != (ssize_t)len)
 		return (-1);
 	return ((int)len);
 }
 
-static int	putptr_out(void *p)
+int	putptr_out(void *p)
 {
 	unsigned long	addr;
 	int				cnt;
 
 	if (!p)
-		return (putstr_out("(nil)"));
+		return (putstr_out("0x0"));
 	if (write(1, "0x", 2) != 2)
 		return (-1);
 	addr = (unsigned long)(uintptr_t)p;

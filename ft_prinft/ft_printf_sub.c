@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:59:14 by lyang             #+#    #+#             */
-/*   Updated: 2025/11/23 17:59:21 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/06 13:20:21 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	handle_spec_extra(va_list *args, char spec)
 	return (2);
 }
 
-static int	handle_spec(va_list *args, char spec)
+int	handle_spec(va_list *args, char spec)
 {
 	if (spec == '%')
 	{
@@ -48,7 +48,7 @@ static int	handle_spec(va_list *args, char spec)
 	return (handle_spec_extra(args, spec));
 }
 
-static int	print_one_char(const char **p)
+int	print_one_char(const char **p)
 {
 	if (putc_out(**p) < 0)
 		return (-1);
@@ -56,13 +56,13 @@ static int	print_one_char(const char **p)
 	return (1);
 }
 
-static int	handle_percent_at(const char **p, va_list *args)
+int	handle_percent_at(const char **p, va_list *args)
 {
 	int	tmp;
 
 	(*p)++;
 	if (**p == '\0')
-		return (0);
+		return (-2);
 	tmp = handle_spec(args, **p);
 	if (tmp < 0)
 		return (-1);
@@ -70,7 +70,7 @@ static int	handle_percent_at(const char **p, va_list *args)
 	return (tmp);
 }
 
-static int	printf_loop(const char *format, va_list *args)
+int	printf_loop(const char *format, va_list *args)
 {
 	const char	*p;
 	int			total;
@@ -89,7 +89,7 @@ static int	printf_loop(const char *format, va_list *args)
 			continue ;
 		}
 		tmp = handle_percent_at(&p, args);
-		if (tmp == 0)
+		if (tmp == -2)
 			break ;
 		if (tmp < 0)
 			return (-1);
