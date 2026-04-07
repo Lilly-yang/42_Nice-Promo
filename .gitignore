@@ -1,4 +1,5 @@
 .DS_Store
-main.c
-*test.c
-/ft_printf/printfTester
+
+Libft/libftTester/
+ft_printf/printfTester/
+get_next_line/gnlTester/
