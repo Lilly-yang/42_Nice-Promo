@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:07 by lyang             #+#    #+#             */
-/*   Updated: 2026/04/07 12:51:12 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:25:55 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,17 @@
 #  define BUFFER_SIZE 42
 # endif
 
+typedef struct s_gnl_state
+{
+	char	*stash;
+	size_t	len;
+	size_t	cap;
+}	t_gnl_state;
+
 char	*get_next_line(int fd);
-size_t	gnl_strlen(const char *s);
 char	*gnl_strchr(const char *s, int c);
-char	*gnl_strjoin(char const *s1, char const *s2);
 char	*gnl_substr(char const *s, unsigned int start, size_t len);
+int		gnl_stash_append(t_gnl_state *state, const char *buffer, size_t bytes);
+char	*gnl_clean_stash(t_gnl_state *state);
 
 #endif
