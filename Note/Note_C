@@ -1,2 +1,4 @@
 Check function documentation (standard library functions)
 $ man printf
+
+cc -Wall -Wextra -Werror
