@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:15 by lyang             #+#    #+#             */
-/*   Updated: 2026/04/09 13:25:55 by lyang            ###   ########.fr       */
+/*   Updated: 2026/04/14 16:40:50 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	state = gnl_state();
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (stash_reset(state), NULL);
 	if (!read_to_stash(fd, state))
 		return (NULL);
