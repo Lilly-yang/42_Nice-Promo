@@ -1,0 +1,18 @@
+👉 VM → hypervisor → purpose
+👉 Debian → apt → AppArmor
+👉 cron → monitoring script
+👉 SSH → port 4242
+👉 LVM → partitions
+
+what is AppArmor?
+AppArmor is a Linux security module that restricts programs using predefined security profiles.
+It limits what programs can do, improving system security.
+
+password: Abcde12345
+
+What is LVM?
+LVM (Logical Volume Manager) allows flexible disk management, such as resizing partitions dynamically.
+More flexible than traditional partitions.
+
+What is UFW?
+Uncomplicated Firewall, used to manage firewall rules easily.
