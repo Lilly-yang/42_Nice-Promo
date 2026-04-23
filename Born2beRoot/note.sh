@@ -67,3 +67,4 @@ sudo ufw status # Check the status of the firewall
 # delete the rule if you want to remove it
 sudo ufw delete allow 8080 # Remove the rule allowing traffic on port 8080
 
+shasum machinename.vdi # Generate a SHA-1 checksum for the specified file (replace machinename.vdi with the actual file name)
