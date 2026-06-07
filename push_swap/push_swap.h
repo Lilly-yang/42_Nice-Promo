@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 00:55:42 by lyang             #+#    #+#             */
+/*   Updated: 2026/06/08 00:55:43 by lyang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
@@ -43,7 +55,10 @@ void	op_rrr(t_stack *a, t_stack *b, int print);
 /* sort */
 void	sort_stack(t_stack *a, t_stack *b);
 void	sort_small(t_stack *a, t_stack *b);
+void	sort_chunk(t_stack *a, t_stack *b);
 void	sort_radix(t_stack *a, t_stack *b);
+int		compress_values(t_stack *a);
+int		index_of_max(const t_stack *stack);
 
 /* utils */
 int		ft_strcmp(const char *s1, const char *s2);
@@ -54,9 +69,5 @@ char	**split_whitespaces(const char *s);
 /* error */
 void	error_exit(t_stack *a, t_stack *b);
 void	parse_error_exit(void);
-
-/* checker bonus */
-char	*get_next_line(int fd);
-int		exec_instruction(const char *line, t_stack *a, t_stack *b);
 
 #endif

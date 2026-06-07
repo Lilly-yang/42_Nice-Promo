@@ -3,19 +3,20 @@ CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
 INCLUDES	=	-Iinclude
 
-COMMON_SRCS	=	src/parse.c \
-				src/parse_split.c \
-				src/stack.c \
-				src/ops_swap.c \
-				src/ops_push.c \
-				src/ops_rotate.c \
-				src/ops_reverse_rotate.c \
-				src/utils.c \
-				src/error.c
+COMMON_SRCS	=	parse.c \
+				parse_split.c \
+				stack.c \
+				ops_swap.c \
+				ops_push.c \
+				ops_rotate.c \
+				ops_reverse_rotate.c \
+				utils.c \
+				error.c
 
-PUSH_SRCS	=	src/main.c \
-				src/sort_small.c \
-				src/sort_radix.c
+PUSH_SRCS	=	main.c \
+				sort_small.c \
+				sort_chunk.c \
+				sort_radix.c
 
 PUSH_OBJS	=	$(COMMON_SRCS:.c=.o) $(PUSH_SRCS:.c=.o)
 
@@ -35,4 +36,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
