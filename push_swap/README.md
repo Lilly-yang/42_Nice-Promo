@@ -1,188 +1,140 @@
-# Push Swap
+*This project has been created as part of the 42 curriculum by lyang.*
 
-A sorting algorithm implementation that sorts a list of integers using two stacks and a predefined set of operations.
+# push_swap
 
 ## Description
 
-Push Swap is a project that challenges you to sort a random list of unique integers using two stacks (stack A and stack B) with a limited set of operations. The goal is to perform the sort with the minimum number of operations possible.
+`push_swap` is a sorting project from the 42 curriculum. The goal is to sort a list of integers using only a restricted set of stack operations while producing as few instructions as possible.
 
-This implementation uses an adaptive sorting strategy:
-- **Small Sort** (≤5 numbers): Uses insertion-based algorithm for optimal operation count
-- **Radix Sort** (>5 numbers): Uses binary radix sort for efficient large dataset sorting
+The program takes a sequence of integers, validates the input, stores the values in two stacks, and prints the operations needed to transform stack A into sorted order. The challenge is not only to sort correctly, but also to choose strategies that keep the operation count reasonably low for different input sizes.
 
-## Project Structure
+This implementation uses three sorting paths:
 
-```
-push_swap/
-├── include/
-│   └── push_swap.h          # Main header file with function declarations
-├── src/
-│   ├── main.c               # Entry point
-│   ├── parse.c              # Argument parsing
-│   ├── parse_split.c        # String splitting utilities
-│   ├── stack.c              # Stack initialization and management
-│   ├── ops_swap.c           # SA, SB, SS operations
-│   ├── ops_push.c           # PA, PB operations
-│   ├── ops_rotate.c         # RA, RB, RR operations
-│   ├── ops_reverse_rotate.c # RRA, RRB, RRR operations
-│   ├── sort_small.c         # Sorting algorithm for small stacks
-│   ├── sort_radix.c         # Radix sort algorithm
-│   ├── utils.c              # Utility functions
-│   └── error.c              # Error handling
-├── Makefile                 # Build configuration
-└── README.md                # This file
-```
+- a small-stack strategy for 2 to 5 values,
+- a chunk-based strategy for medium-sized inputs,
+- a radix-based strategy for larger inputs.
 
-## Stack Operations
+## Instructions
 
-The program supports the following operations:
+### Compilation
 
-### Basic Operations
-- **`sa`** : Swap the first 2 elements at the top of stack A
-- **`sb`** : Swap the first 2 elements at the top of stack B
-- **`ss`** : Execute `sa` and `sb` simultaneously
+From the `push_swap/` directory, build the project with:
 
-### Push Operations
-- **`pa`** : Push the first element from stack B to stack A
-- **`pb`** : Push the first element from stack A to stack B
-
-### Rotate Operations
-- **`ra`** : Rotate stack A upwards (first element moves to the end)
-- **`rb`** : Rotate stack B upwards
-- **`rr`** : Execute `ra` and `rb` simultaneously
-
-### Reverse Rotate Operations
-- **`rra`** : Reverse rotate stack A (last element moves to the front)
-- **`rrb`** : Reverse rotate stack B
-- **`rrr`** : Execute `rra` and `rrb` simultaneously
-
-## Compilation
-
-```bash
-make              # Compile the program
-make clean        # Remove object files
-make fclean       # Remove object files and executable
-make re           # Rebuild from scratch
-```
-
-Compilation flags:
-- `-Wall -Wextra -Werror` : Strict compilation with all warnings
-
-## Usage
-
-```bash
-./push_swap <number1> <number2> <number3> ...
-```
-
-### Examples
-
-**Sort three numbers:**
-```bash
-./push_swap 3 2 1
-# Output:
-# sa
-# rra
-```
-
-**Sort five numbers:**
-```bash
-./push_swap 5 4 3 2 1
-# Output:
-# pb
-# pb
-# sa
-# pa
-# pa
-```
-
-**Already sorted:**
-```bash
-./push_swap 1 2 3
-# Output:
-# (no operations - stack is already sorted)
-```
-
-### Input Format
-- Space-separated or quoted numbers: `./push_swap "3 2 1"` or `./push_swap 3 2 1`
-- Numbers must be unique integers
-- Handles both positive and negative integers
-- Supports INT_MIN to INT_MAX range
-
-### Output
-The program outputs the sequence of operations needed to sort stack A in ascending order, one operation per line.
-
-## Algorithm Strategy
-
-### Small Stack Sorting (size ≤ 5)
-Uses an optimized insertion-based approach:
-1. Find the position to insert the next element
-2. Use rotations and swaps to move elements
-3. Minimal operation count for small inputs
-
-### Large Stack Sorting (size > 5)
-Uses binary Radix Sort algorithm:
-1. Create a mapping of values to their ranks (0 to n-1)
-2. Process bits from least significant to most significant
-3. For each bit, push all 0-bit numbers to stack B, rotate stack A
-4. Push everything back from B to A
-5. Result: Stack A is sorted in ascending order
-
-## Sorting Efficiency
-
-The implementation aims to minimize the number of operations:
-- **2 numbers**: 1 operation max
-- **3 numbers**: 2 operations max
-- **5 numbers**: ~12 operations
-- **100 numbers**: ~900 operations (target: < 1200)
-- **500 numbers**: ~5500 operations (target: < 12000)
-
-## Error Handling
-
-The program handles and reports the following errors:
-- Non-integer arguments
-- Duplicate numbers
-- Invalid number format
-- No arguments provided (exits normally)
-- Memory allocation failures
-
-Errors are reported to stdout with "Error" message and programs exits with status 1.
-
-## Key Features
-
-- ✅ Fully compliant with 42 school push_swap specifications
-- ✅ Handles edge cases (single number, two numbers, already sorted)
-- ✅ Efficient sorting algorithms optimized for different input sizes
-- ✅ Robust error handling and validation
-- ✅ Memory-safe with proper cleanup
-- ✅ Strict compilation flags (-Wall -Wextra -Werror)
-
-## Building and Testing
-
-To compile and test:
-
-```bash
-# Build the program
+```sh
 make
-
-# Test with a few numbers
-./push_swap 3 2 1
-
-# Test with more numbers
-./push_swap 5 4 3 2 1 0 -1
-
-# Test edge cases
-./push_swap 42          # Single number (no output)
-./push_swap 1 2 3       # Already sorted (no output)
 ```
 
-## Implementation Notes
+This produces the `push_swap` executable.
 
-- Written in C following 42 school C coding standard (Norm)
-- No external libraries except standard C library
-- Two-stack based sorting with predefined operations
-- Adaptive algorithm selection based on input size
-- Optimized for both small and large datasets
+To remove generated objects and the executable:
 
-## Author
+```sh
+make clean
+make fclean
+make re
+```
 
-Created as part of the 42 School curriculum (Nice Promo)
+### Execution
+
+Run the program with a list of integers, either as separate arguments or as a single quoted string:
+
+```sh
+./push_swap 3 2 1
+./push_swap "3 2 1"
+```
+
+The program prints the sequence of allowed operations on standard output.
+
+### Input rules
+
+- Only valid integers are accepted.
+- Duplicate values are rejected.
+- Values must fit in the 32-bit signed integer range.
+- Empty arguments and malformed tokens are treated as errors.
+
+### Operation set
+
+The project relies on the classic push_swap operations:
+
+- `sa`, `sb`, `ss`
+- `pa`, `pb`
+- `ra`, `rb`, `rr`
+- `rra`, `rrb`, `rrr`
+
+## Algorithm Choices
+
+The implementation selects the sorting strategy according to the number of values:
+
+### 1. Small-stack strategy for 2 to 5 values
+
+For very small inputs, a specialized approach is more efficient than a generic algorithm.
+
+For 2 values, the solution is trivial: swap only when the pair is in descending order.
+
+For 3 values, the code checks the relative order of the top three elements and applies the shortest combination of swap, rotate, and reverse-rotate operations needed to sort them.
+
+For 4 and 5 values, the algorithm repeatedly moves the minimum value to the top with the cheapest rotation direction, pushes it to stack B, sorts the remaining 3 values, and then pushes the saved values back to stack A.
+
+Why this choice:
+
+- It minimizes overhead on tiny inputs.
+- It avoids the complexity of a larger algorithm when the entire problem fits into a few direct cases.
+- It keeps the operation count low and predictable.
+
+### 2. Chunk-based strategy for medium inputs
+
+For inputs up to 100 values, the program uses a chunking approach after coordinate compression.
+
+Coordinate compression remaps the original integers to the range `0..n-1`. This makes comparisons simpler and avoids issues with negative values or large numeric ranges.
+
+The compressed range is then split into chunks. Values belonging to the current chunk are pushed from stack A to stack B. During this phase, values in the lower half of the current chunk are rotated inside stack B so that the structure of B remains more favorable for reconstruction.
+
+Once all values are moved to stack B, the algorithm repeatedly finds the maximum value in B, rotates B in the shortest direction to bring it to the top, and pushes it back to A. This restores ascending order in A.
+
+Why this choice:
+
+- It is more adaptive than plain radix sorting for mid-sized inputs.
+- It reduces the number of unnecessary operations compared with a naive push-all-then-sort approach.
+- The chunk size can be tuned for the input range, which balances efficiency and implementation simplicity.
+
+### 3. Radix strategy for large inputs
+
+For larger inputs, the program uses binary radix sort on the compressed values.
+
+After compression, the algorithm processes the input bit by bit. For each bit position, values with a `0` in that position are pushed to B, and values with a `1` are rotated in A. After one full pass, all values are pushed back from B to A. The process repeats for every bit required to represent `n - 1`.
+
+Why this choice:
+
+- It is deterministic and easy to reason about.
+- It scales well to larger input sizes.
+- Its complexity is predictable, which is useful when the number of operations must remain controlled.
+
+### General design decisions
+
+- Two stacks are used because the subject restricts the available workspace to stack operations.
+- The secondary stack is preallocated to the full input size, which avoids repeated reallocations during sorting.
+- Compression is used before the chunk and radix paths so that both algorithms work on a compact, ordered index space.
+- The program exits early when the input is already sorted, avoiding unnecessary work.
+
+## Resources
+
+Classic references used while building and documenting this project:
+
+- 42 push_swap subject and evaluation guidelines.
+- The `strtol(3)` man page for strict integer parsing and overflow handling.
+- Introductory references on binary radix sort.
+- General articles and tutorials on stack-based sorting strategies and push_swap optimization.
+
+### AI usage
+
+AI was used to draft and structure this README, refine the wording of the algorithm explanations, and check that the documented behavior matched the implementation strategy in the source code.
+
+AI was not used to generate the sorting logic itself. The code remains the result of the project implementation.
+
+## Usage Example
+
+```sh
+./push_swap 4 67 3 87 23
+```
+
+The program prints the operations required to sort the input in ascending order.
