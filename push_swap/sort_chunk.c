@@ -6,11 +6,21 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:45 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 01:01:53 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static int	int_sqrt(int n)
+{
+	int	root;
+
+	root = 1;
+	while ((root + 1) * (root + 1) <= n)
+		root++;
+	return (root);
+}
 
 static void	bring_max_to_top(t_stack *b, int idx, int size)
 {
@@ -65,30 +75,23 @@ static void	fill_chunks(t_stack *a, t_stack *b, int n, int chunk_size)
 	}
 }
 
-static void	push_back_sorted(t_stack *a, t_stack *b)
+void	sort_chunk(t_stack *a, t_stack *b)
 {
+	int	n;
+	int	chunk_size;
 	int	idx;
 
+	if (!compress_values(a))
+		error_exit(a, b);
+	n = a->size;
+	chunk_size = int_sqrt(n);
+	if (chunk_size < 1)
+		chunk_size = 1;
+	fill_chunks(a, b, n, chunk_size);
 	while (b->size > 0)
 	{
 		idx = index_of_max(b);
 		bring_max_to_top(b, idx, b->size);
 		op_pa(a, b, 1);
 	}
-}
-
-void	sort_chunk(t_stack *a, t_stack *b)
-{
-	int	n;
-	int	chunk_size;
-
-	if (!compress_values(a))
-		error_exit(a, b);
-	n = a->size;
-	if (n <= 100)
-		chunk_size = (n + 5 - 1) / 5;
-	else
-		chunk_size = (n + 11 - 1) / 11;
-	fill_chunks(a, b, n, chunk_size);
-	push_back_sorted(a, b);
 }

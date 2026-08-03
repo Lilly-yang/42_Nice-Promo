@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:29 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 00:55:30 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,20 @@ static void	rotate(t_stack *stack)
 	stack->arr[stack->size - 1] = first;
 }
 
+static t_bench	*get_bench(t_stack *a, t_stack *b)
+{
+	if (a && a->bench)
+		return (a->bench);
+	if (b && b->bench)
+		return (b->bench);
+	return (NULL);
+}
+
 void	op_ra(t_stack *a, int print)
 {
 	rotate(a);
+	if (print && a && a->bench)
+		a->bench->ra++;
 	if (print)
 		write(1, "ra\n", 3);
 }
@@ -39,14 +50,21 @@ void	op_ra(t_stack *a, int print)
 void	op_rb(t_stack *b, int print)
 {
 	rotate(b);
+	if (print && b && b->bench)
+		b->bench->rb++;
 	if (print)
 		write(1, "rb\n", 3);
 }
 
 void	op_rr(t_stack *a, t_stack *b, int print)
 {
+	t_bench	*bench;
+
+	bench = get_bench(a, b);
 	rotate(a);
 	rotate(b);
+	if (print && bench)
+		bench->rr++;
 	if (print)
 		write(1, "rr\n", 3);
 }

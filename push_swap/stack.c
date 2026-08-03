@@ -6,16 +6,17 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:56 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 00:55:57 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	stack_init(t_stack *stack, int *values, int size)
+void	stack_init(t_stack *stack, int *values, int size, t_bench *bench)
 {
 	stack->arr = values;
 	stack->size = size;
+	stack->bench = bench;
 }
 
 void	stack_free(t_stack *stack)
@@ -25,6 +26,7 @@ void	stack_free(t_stack *stack)
 	free(stack->arr);
 	stack->arr = NULL;
 	stack->size = 0;
+	stack->bench = NULL;
 }
 
 int	stack_is_sorted(const t_stack *stack)

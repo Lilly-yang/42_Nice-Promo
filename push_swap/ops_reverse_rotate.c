@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:25 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 00:55:26 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,20 @@ static void	reverse_rotate(t_stack *stack)
 	stack->arr[0] = last;
 }
 
+static t_bench	*get_bench(t_stack *a, t_stack *b)
+{
+	if (a && a->bench)
+		return (a->bench);
+	if (b && b->bench)
+		return (b->bench);
+	return (NULL);
+}
+
 void	op_rra(t_stack *a, int print)
 {
 	reverse_rotate(a);
+	if (print && a && a->bench)
+		a->bench->rra++;
 	if (print)
 		write(1, "rra\n", 4);
 }
@@ -39,14 +50,21 @@ void	op_rra(t_stack *a, int print)
 void	op_rrb(t_stack *b, int print)
 {
 	reverse_rotate(b);
+	if (print && b && b->bench)
+		b->bench->rrb++;
 	if (print)
 		write(1, "rrb\n", 4);
 }
 
 void	op_rrr(t_stack *a, t_stack *b, int print)
 {
+	t_bench	*bench;
+
+	bench = get_bench(a, b);
 	reverse_rotate(a);
 	reverse_rotate(b);
+	if (print && bench)
+		bench->rrr++;
 	if (print)
 		write(1, "rrr\n", 4);
 }

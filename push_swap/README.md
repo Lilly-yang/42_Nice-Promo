@@ -1,140 +1,196 @@
-*This project has been created as part of the 42 curriculum by lyang.*
+﻿*This project has been created as part of the 42 curriculum by lyang, ylecain.*
 
 # push_swap
 
 ## Description
 
-`push_swap` is a sorting project from the 42 curriculum. The goal is to sort a list of integers using only a restricted set of stack operations while producing as few instructions as possible.
+`push_swap` is a 42 sorting project.
+The goal is to sort a list of integers in ascending order using only the allowed stack operations on two stacks, `a` and `b`, while keeping the number of operations as low as possible.
 
-The program takes a sequence of integers, validates the input, stores the values in two stacks, and prints the operations needed to transform stack A into sorted order. The challenge is not only to sort correctly, but also to choose strategies that keep the operation count reasonably low for different input sizes.
+This implementation includes the mandatory program `push_swap` and supports the four strategy modes required by the subject:
+- `--simple`
+- `--medium`
+- `--complex`
+- `--adaptive`
 
-This implementation uses three sorting paths:
+It also supports the mandatory benchmark mode:
+- `--bench`
 
-- a small-stack strategy for 2 to 5 values,
-- a chunk-based strategy for medium-sized inputs,
-- a radix-based strategy for larger inputs.
+## Contributors
+
+- `lyang`: original project structure, stack operations, and initial sorting base.
+- `ylecain`: parser cleanup, strategy selection fixes, adaptive mode based on disorder, benchmark integration, Makefile fixes, testing, and documentation updates.
 
 ## Instructions
 
 ### Compilation
 
-From the `push_swap/` directory, build the project with:
+Build the project with:
 
 ```sh
 make
 ```
 
-This produces the `push_swap` executable.
+### Cleanup
 
-To remove generated objects and the executable:
+Remove object files:
 
 ```sh
 make clean
+```
+
+Remove object files and the binary:
+
+```sh
 make fclean
+```
+
+Rebuild everything:
+
+```sh
 make re
 ```
 
-### Execution
+## Execution
 
-Run the program with a list of integers, either as separate arguments or as a single quoted string:
+Run the program with a list of integers:
 
 ```sh
 ./push_swap 3 2 1
+```
+
+You can also pass the numbers as a single quoted string:
+
+```sh
 ./push_swap "3 2 1"
 ```
 
-The program prints the sequence of allowed operations on standard output.
+Force a specific strategy:
 
-### Input rules
+```sh
+./push_swap --simple 5 4 3 2 1
+./push_swap --medium 4 67 3 87 23
+./push_swap --complex 4 67 3 87 23
+./push_swap --adaptive 4 67 3 87 23
+```
 
-- Only valid integers are accepted.
-- Duplicate values are rejected.
-- Values must fit in the 32-bit signed integer range.
-- Empty arguments and malformed tokens are treated as errors.
+Run with benchmark mode enabled:
 
-### Operation set
+```sh
+./push_swap --bench --adaptive 4 67 3 87 23
+```
 
-The project relies on the classic push_swap operations:
+## Output behavior
 
+- The list of sorting operations is printed to `stdout`.
+- Benchmark information is printed to `stderr` only when `--bench` is used.
+- If no arguments are provided, the program prints nothing.
+- On error, the program prints `Error` followed by `\n` on `stderr`.
+
+## Input rules
+
+The program accepts:
+- valid signed 32-bit integers,
+- either split arguments or a single quoted string.
+
+The program rejects:
+- duplicate values,
+- non-numeric tokens,
+- values outside the `int` range,
+- empty or malformed arguments.
+
+## Allowed operations
+
+The project uses the standard push_swap instruction set:
 - `sa`, `sb`, `ss`
 - `pa`, `pb`
 - `ra`, `rb`, `rr`
 - `rra`, `rrb`, `rrr`
 
-## Algorithm Choices
+## Algorithm choices
 
-The implementation selects the sorting strategy according to the number of values:
+### 1. Simple strategy — `--simple`
 
-### 1. Small-stack strategy for 2 to 5 values
+The simple strategy is an `O(n^2)` method.
+It repeatedly brings the minimum value to the top of stack `a`, pushes it to stack `b`, sorts the remaining small set directly, and then pushes everything back to `a`.
 
-For very small inputs, a specialized approach is more efficient than a generic algorithm.
+This strategy is suitable for very small or almost trivial inputs.
 
-For 2 values, the solution is trivial: swap only when the pair is in descending order.
+### 2. Medium strategy — `--medium`
 
-For 3 values, the code checks the relative order of the top three elements and applies the shortest combination of swap, rotate, and reverse-rotate operations needed to sort them.
+The medium strategy is a chunk-based `O(n*sqrt(n))` style method.
+Before sorting, values are compressed into ranks from `0` to `n - 1`.
+The input is then processed in chunks whose size is close to `sqrt(n)`.
+Values belonging to the current range are pushed to `b`, and stack `b` is partially rotated to improve reconstruction.
 
-For 4 and 5 values, the algorithm repeatedly moves the minimum value to the top with the cheapest rotation direction, pushes it to stack B, sorts the remaining 3 values, and then pushes the saved values back to stack A.
+This strategy is intended for medium-sized inputs.
 
-Why this choice:
+### 3. Complex strategy — `--complex`
 
-- It minimizes overhead on tiny inputs.
-- It avoids the complexity of a larger algorithm when the entire problem fits into a few direct cases.
-- It keeps the operation count low and predictable.
+The complex strategy is a radix-based `O(n log n)` method on compressed ranks.
+It processes the numbers bit by bit, pushing values with a `0` bit to `b` and rotating values with a `1` bit in `a`, then restoring everything back to `a` after each pass.
 
-### 2. Chunk-based strategy for medium inputs
+This strategy is intended for large inputs.
 
-For inputs up to 100 values, the program uses a chunking approach after coordinate compression.
+### 4. Adaptive strategy — `--adaptive`
 
-Coordinate compression remaps the original integers to the range `0..n-1`. This makes comparisons simpler and avoids issues with negative values or large numeric ranges.
+The adaptive strategy is the default behavior when no strategy flag is provided.
+It computes the disorder of stack `a` before any move and selects the internal strategy according to the subject thresholds:
+- if `disorder < 0.2`, it uses the simple strategy,
+- if `0.2 <= disorder < 0.5`, it uses the medium strategy,
+- if `disorder >= 0.5`, it uses the complex strategy.
 
-The compressed range is then split into chunks. Values belonging to the current chunk are pushed from stack A to stack B. During this phase, values in the lower half of the current chunk are rotated inside stack B so that the structure of B remains more favorable for reconstruction.
+## Disorder metric
 
-Once all values are moved to stack B, the algorithm repeatedly finds the maximum value in B, rotates B in the shortest direction to bring it to the top, and pushes it back to A. This restores ascending order in A.
+Disorder measures how far the initial stack is from being sorted.
+It is computed as:
 
-Why this choice:
+- number of inverted pairs / total number of pairs
 
-- It is more adaptive than plain radix sorting for mid-sized inputs.
-- It reduces the number of unnecessary operations compared with a naive push-all-then-sort approach.
-- The chunk size can be tuned for the input range, which balances efficiency and implementation simplicity.
+A fully sorted stack has a disorder of `0`.
+A highly reversed stack approaches `1`.
 
-### 3. Radix strategy for large inputs
+## Benchmark mode
 
-For larger inputs, the program uses binary radix sort on the compressed values.
+When `--bench` is enabled, the program prints the following information to `stderr` after sorting:
+- disorder percentage with two decimal places,
+- the strategy actually used,
+- its theoretical complexity class,
+- the total number of operations,
+- the count of each operation type:
+  - `sa`, `sb`, `ss`
+  - `pa`, `pb`
+  - `ra`, `rb`, `rr`
+  - `rra`, `rrb`, `rrr`
 
-After compression, the algorithm processes the input bit by bit. For each bit position, values with a `0` in that position are pushed to B, and values with a `1` are rotated in A. After one full pass, all values are pushed back from B to A. The process repeats for every bit required to represent `n - 1`.
+## Example
 
-Why this choice:
+```sh
+ARG="4 67 3 87 23"
+./push_swap --adaptive $ARG | ./checker_linux $ARG
+```
 
-- It is deterministic and easy to reason about.
-- It scales well to larger input sizes.
-- Its complexity is predictable, which is useful when the number of operations must remain controlled.
+Expected result:
 
-### General design decisions
-
-- Two stacks are used because the subject restricts the available workspace to stack operations.
-- The secondary stack is preallocated to the full input size, which avoids repeated reallocations during sorting.
-- Compression is used before the chunk and radix paths so that both algorithms work on a compact, ordered index space.
-- The program exits early when the input is already sorted, avoiding unnecessary work.
+```sh
+OK
+```
 
 ## Resources
 
-Classic references used while building and documenting this project:
+Useful references related to the project:
+- the official 42 `push_swap` subject,
+- algorithm complexity references,
+- radix sort references,
+- chunk-based push_swap resources,
+- general documentation about stack-based sorting.
 
-- 42 push_swap subject and evaluation guidelines.
-- The `strtol(3)` man page for strict integer parsing and overflow handling.
-- Introductory references on binary radix sort.
-- General articles and tutorials on stack-based sorting strategies and push_swap optimization.
+## AI usage
 
-### AI usage
+AI was used to:
+- audit the repository against the subject,
+- identify inconsistencies between source files, prototypes, and the Makefile,
+- help reorganize and rewrite the documentation,
+- assist with planning and validating corrections.
 
-AI was used to draft and structure this README, refine the wording of the algorithm explanations, and check that the documented behavior matched the implementation strategy in the source code.
-
-AI was not used to generate the sorting logic itself. The code remains the result of the project implementation.
-
-## Usage Example
-
-```sh
-./push_swap 4 67 3 87 23
-```
-
-The program prints the operations required to sort the input in ascending order.
+All generated suggestions were reviewed, tested, and adapted manually before being kept in the project.

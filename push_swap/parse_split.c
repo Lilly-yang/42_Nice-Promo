@@ -6,11 +6,21 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:35 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 01:00:09 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	free_words(char **out, int count)
+{
+	while (count > 0)
+	{
+		count--;
+		free(out[count]);
+	}
+	free(out);
+}
 
 static int	count_words(const char *s)
 {
@@ -53,8 +63,8 @@ static char	*dup_word(const char *start, int len)
 
 static char	**fill_words(const char *s, char **out)
 {
-	int			word;
-	int			len;
+	int	word;
+	int	len;
 
 	word = 0;
 	while (*s)
@@ -68,7 +78,10 @@ static char	**fill_words(const char *s, char **out)
 		{
 			out[word] = dup_word(s, len);
 			if (!out[word])
+			{
+				free_words(out, word);
 				return (NULL);
+			}
 			word++;
 			s += len;
 		}
@@ -87,6 +100,6 @@ char	**split_whitespaces(const char *s)
 	if (!out)
 		return (NULL);
 	if (!fill_words(s, out))
-		return (free_tokens(out), NULL);
+		return (NULL);
 	return (out);
 }

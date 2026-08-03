@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
+/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:38 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 01:01:53 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-static int	parse_int_strict(const char *s, int *out)
-{
-	char	*end;
-	long	value;
-
-	if (!s || !*s)
-		return (0);
-	if (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\v'
-		|| *s == '\f' || *s == '\r')
-		return (0);
-	value = strtol(s, &end, 10);
-	if (*end || value < INT_MIN || value > INT_MAX)
-		return (0);
-	*out = (int)value;
-	return (1);
-}
 
 static int	has_duplicate(int *arr, int size, int value)
 {
@@ -43,30 +26,43 @@ static int	has_duplicate(int *arr, int size, int value)
 	return (0);
 }
 
-static int	append_value(int **arr, int *size, int value)
+static int	grow_values(int **arr, int size, int *capacity)
 {
 	int	*new_arr;
+	int	new_capacity;
 	int	i;
 
-	if (has_duplicate(*arr, *size, value))
-		return (0);
-	new_arr = malloc(sizeof(int) * (*size + 1));
+	if (*capacity == 0)
+		new_capacity = 16;
+	else
+		new_capacity = *capacity * 2;
+	new_arr = malloc(sizeof(int) * new_capacity);
 	if (!new_arr)
 		return (0);
 	i = 0;
-	while (i < *size)
+	while (i < size)
 	{
 		new_arr[i] = (*arr)[i];
 		i++;
 	}
-	new_arr[*size] = value;
 	free(*arr);
 	*arr = new_arr;
+	*capacity = new_capacity;
+	return (1);
+}
+
+static int	append_value(int **arr, int *size, int *capacity, int value)
+{
+	if (has_duplicate(*arr, *size, value))
+		return (0);
+	if (*size == *capacity && !grow_values(arr, *size, capacity))
+		return (0);
+	(*arr)[*size] = value;
 	(*size)++;
 	return (1);
 }
 
-static int	parse_one_arg(const char *arg, int **arr, int *size)
+static int	parse_one_arg(const char *arg, int **arr, int *size, int *capacity)
 {
 	char	**tokens;
 	int		value;
@@ -81,7 +77,7 @@ static int	parse_one_arg(const char *arg, int **arr, int *size)
 	while (tokens[i])
 	{
 		if (!parse_int_strict(tokens[i], &value)
-			|| !append_value(arr, size, value))
+			|| !append_value(arr, size, capacity, value))
 		{
 			free_tokens(tokens);
 			return (0);
@@ -97,14 +93,17 @@ int	parse_arguments(int argc, char **argv, t_parse_result *out)
 {
 	int	*values;
 	int	size;
+	int	capacity;
 	int	i;
 
 	values = NULL;
 	size = 0;
+	capacity = 0;
 	i = 1;
 	while (i < argc)
 	{
-		if (!argv[i] || !*argv[i] || !parse_one_arg(argv[i], &values, &size))
+		if (!argv[i] || !*argv[i]
+			|| !parse_one_arg(argv[i], &values, &size, &capacity))
 		{
 			free(values);
 			return (0);

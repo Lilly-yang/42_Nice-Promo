@@ -3,42 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
+/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:16 by lyang             #+#    #+#             */
-/*   Updated: 2026/06/08 00:55:17 by lyang            ###   ########.fr       */
+/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	sort_stack(t_stack *a, t_stack *b)
+static t_bench	*get_bench_ptr(t_config *cfg, t_bench *bench)
 {
-	if (a->size <= 5)
-		sort_small(a, b);
-	else if (a->size <= 100)
-		sort_chunk(a, b);
-	else
-		sort_radix(a, b);
+	if (!cfg->bench)
+		return (NULL);
+	bench_init(bench);
+	return (bench);
+}
+
+static void	init_stacks(t_stack *a, t_stack *b, t_parse_result *parsed,
+	t_bench *bench)
+{
+	stack_init(a, parsed->values, parsed->count, bench);
+	stack_init(b, malloc(sizeof(int) * parsed->count), 0, bench);
+	if (!b->arr)
+		error_exit(a, NULL);
+}
+
+static t_mode	run_program(t_program *prog)
+{
+	t_bench		*bench_ptr;
+	t_mode		used;
+	double		disorder;
+
+	bench_ptr = get_bench_ptr(&prog->cfg, &prog->bench);
+	init_stacks(&prog->a, &prog->b, &prog->parsed, bench_ptr);
+	disorder = compute_disorder(&prog->a);
+	used = run_sort(prog->cfg.mode, &prog->a, &prog->b, disorder);
+	if (prog->cfg.bench)
+		bench_print(disorder, used, &prog->bench);
+	stack_free(&prog->a);
+	stack_free(&prog->b);
+	return (used);
 }
 
 int	main(int argc, char **argv)
 {
-	t_parse_result	parsed;
-	t_stack			a;
-	t_stack			b;
+	t_program	prog;
 
 	if (argc < 2)
 		return (0);
-	if (!parse_arguments(argc, argv, &parsed))
+	if (!parse_config(&argc, &argv, &prog.cfg))
 		parse_error_exit();
-	stack_init(&a, parsed.values, parsed.count);
-	stack_init(&b, malloc(sizeof(int) * parsed.count), 0);
-	if (!b.arr)
-		error_exit(&a, NULL);
-	if (!stack_is_sorted(&a))
-		sort_stack(&a, &b);
-	stack_free(&a);
-	stack_free(&b);
+	if (argc < 2 || !parse_arguments(argc, argv, &prog.parsed))
+		parse_error_exit();
+	run_program(&prog);
 	return (0);
 }
