@@ -1,6 +1,8 @@
 .DS_Store
+*.pyc
 
 Libft/libftTester/
 ft_printf/printfTester/
 get_next_line/gnlTester/
 get_next_line/Moumounator_gnl/
+.vscode/settings.json
