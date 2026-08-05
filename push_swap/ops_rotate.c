@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:29 by lyang             #+#    #+#             */
-/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:27:39 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	op_ra(t_stack *a, int print)
 	rotate(a);
 	if (print && a && a->bench)
 		a->bench->ra++;
-	if (print)
+	if (print && !a->bench->count_only)
 		write(1, "ra\n", 3);
 }
 
@@ -52,7 +52,7 @@ void	op_rb(t_stack *b, int print)
 	rotate(b);
 	if (print && b && b->bench)
 		b->bench->rb++;
-	if (print)
+	if (print && !b->bench->count_only)
 		write(1, "rb\n", 3);
 }
 
@@ -65,6 +65,6 @@ void	op_rr(t_stack *a, t_stack *b, int print)
 	rotate(b);
 	if (print && bench)
 		bench->rr++;
-	if (print)
+	if (print && !bench->count_only)
 		write(1, "rr\n", 3);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:16 by lyang             #+#    #+#             */
-/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:18:11 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static t_bench	*get_bench_ptr(t_config *cfg, t_bench *bench)
 	if (!cfg->bench)
 		return (NULL);
 	bench_init(bench);
+	bench->count_only = cfg->count_only;
 	return (bench);
 }
 

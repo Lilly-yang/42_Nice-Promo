@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:22 by lyang             #+#    #+#             */
-/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:25:16 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	op_pa(t_stack *a, t_stack *b, int print)
 	push_top(a, b);
 	if (print && a && a->bench)
 		a->bench->pa++;
-	if (print)
+	if (print && !a->bench->count_only)
 		write(1, "pa\n", 3);
 }
 
@@ -51,6 +51,6 @@ void	op_pb(t_stack *a, t_stack *b, int print)
 	push_top(b, a);
 	if (print && a && a->bench)
 		a->bench->pb++;
-	if (print)
+	if (print && !a->bench->count_only)
 		write(1, "pb\n", 3);
 }

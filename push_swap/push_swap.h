@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:42 by lyang             #+#    #+#             */
-/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:17:26 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_config
 {
 	t_mode	mode;
 	int		bench;
+	int		count_only;
 }	t_config;
 
 typedef struct s_bench
@@ -45,6 +46,7 @@ typedef struct s_bench
 	int	rra;
 	int	rrb;
 	int	rrr;
+	int count_only;
 }	t_bench;
 
 typedef struct s_stack

@@ -6,7 +6,7 @@
 /*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 00:55:32 by lyang             #+#    #+#             */
-/*   Updated: 2026/07/09 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:28:14 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	op_sa(t_stack *a, int print)
 	swap_top(a);
 	if (print && a && a->bench)
 		a->bench->sa++;
-	if (print)
+	if (print && !a->bench->count_only)
 		write(1, "sa\n", 3);
 }
 
@@ -46,7 +46,7 @@ void	op_sb(t_stack *b, int print)
 	swap_top(b);
 	if (print && b && b->bench)
 		b->bench->sb++;
-	if (print)
+	if (print && !b->bench->count_only)
 		write(1, "sb\n", 3);
 }
 
@@ -59,6 +59,6 @@ void	op_ss(t_stack *a, t_stack *b, int print)
 	swap_top(b);
 	if (print && bench)
 		bench->ss++;
-	if (print)
+	if (print && !bench->count_only)
 		write(1, "ss\n", 3);
 }

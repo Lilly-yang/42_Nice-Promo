@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bench.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 00:00:00 by ylecain           #+#    #+#             */
-/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:17:36 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,5 @@ void	bench_init(t_bench *bench)
 	bench->rra = 0;
 	bench->rrb = 0;
 	bench->rrr = 0;
+	bench->count_only = 0;
 }

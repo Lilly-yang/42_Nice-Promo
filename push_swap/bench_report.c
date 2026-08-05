@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bench_report.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/15 00:00:00 by ylecain           #+#    #+#             */
-/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 16:19:24 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,27 @@ void	bench_print(double disorder, t_mode used, t_bench *bench)
 {
 	int	pct;
 
-	pct = (int)(disorder * 10000.0 + 0.5);
-	write_str("disorder: ");
-	write_num(pct / 100);
-	write_str(".");
-	if ((pct % 100) < 10)
-		write_str("0");
-	write_num(pct % 100);
-	write_str("%\n");
-	print_strategy(used);
-	write_str("total: ");
-	write_num(bench_total(bench));
-	write_str("\n");
-	bench_print_counts(bench);
+	if (bench->count_only)
+	{
+		write_str("total: ");
+		write_num(bench_total(bench));
+		write_str("\n");
+		return ;
+	}
+	else
+	{
+		pct = (int)(disorder * 10000.0 + 0.5);
+		write_str("disorder: ");
+		write_num(pct / 100);
+		write_str(".");
+		if ((pct % 100) < 10)
+			write_str("0");
+		write_num(pct % 100);
+		write_str("%\n");
+		print_strategy(used);
+		write_str("total: ");
+		write_num(bench_total(bench));
+		write_str("\n");
+		bench_print_counts(bench);
+	}
 }

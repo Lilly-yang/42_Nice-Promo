@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_mode.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylecain <ylecain@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lyang <lyang@student.42nice.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/15 00:00:00 by ylecain           #+#    #+#             */
-/*   Updated: 2026/07/15 00:00:00 by ylecain          ###   ########.fr       */
+/*   Updated: 2026/07/22 17:10:49 by lyang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_mode	run_sort(t_mode mode, t_stack *a, t_stack *b, double disorder)
 	used = mode;
 	if (mode == MODE_ADAPTIVE)
 		used = select_adaptive(disorder);
+	if (stack_is_sorted(a))
+		return (used);
 	launch_sort(used, a, b);
 	return (used);
 }
