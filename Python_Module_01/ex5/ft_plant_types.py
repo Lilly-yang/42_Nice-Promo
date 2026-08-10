@@ -1,6 +1,6 @@
 class Plant:
     def __init__(self) -> None:
-        self._plant_data: dict[str, dict[str, float | int]] = {}
+        self._plant_data: dict[str, dict[str, float | int | str | bool]] = {}
 
     def creat_plant(
         self,
@@ -38,24 +38,19 @@ class Plant:
 
     def get_height(self, name: str) -> float:
         height = self._plant_data[name]['height']
-        if height >= 0:
-            return height
-        else:
-            print("height is invalid, reset to 0")
-            self.set_height(name, 0)
-            return 0.0
+        if isinstance(height, (int, float)) and height >= 0:
+            return float(height)
+        print("height is invalid, reset to 0")
+        self.set_height(name, 0)
+        return 0.0
 
     def get_age(self, name: str) -> int:
         age = self._plant_data[name]['age']
-        if age >= 0:
-            if isinstance(age, int):
-                return age
-            else:
-                return int(age)
-        else:
-            print("age is invalid, reset to 0")
-            self.set_age(name, 0)
-            return 0
+        if isinstance(age, (int, float)) and age >= 0:
+            return int(age)
+        print("age is invalid, reset to 0")
+        self.set_age(name, 0)
+        return 0
 
     def show(self, name: str) -> None:
         h = self.get_height(name)
@@ -65,11 +60,22 @@ class Plant:
               f"{a} days old")
 
     def grow(self, name: str) -> None:
-        self._plant_data[name]['height'] += self._plant_data[name]['growth']
+        height_value = self._plant_data[name]['height']
+        growth_value = self._plant_data[name]['growth']
+        if isinstance(height_value, (int, float)) and\
+           isinstance(growth_value, (int, float)):
+            self._plant_data[name]['height'] = \
+                float(height_value + growth_value)
+        else:
+            self._plant_data[name]['height'] = 0.0
         self.age(name)
 
     def age(self, name: str) -> None:
-        self._plant_data[name]['age'] += 1
+        age_value = self._plant_data[name]['age']
+        if isinstance(age_value, (int, float)):
+            self._plant_data[name]['age'] = int(age_value + 1)
+        else:
+            self._plant_data[name]['age'] = 0
 
     # def show_growth(self, name: str, days: int) -> None:
     #     self.float_height()
@@ -93,11 +99,12 @@ class Plant:
 
 
 class Flower(Plant):
-    def __int__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self._plant_data: dict[str, dict[str, float | int | str]] = {}
+        self._plant_data: dict[str, dict[str, float | int | str | bool]] = {}
 
-    def creat_plant(self, name: str, height: float | int =0.0, age: int =0, growth: float =0.1, color: str ='') -> None:
+    def creat_plant(self, name: str, height: float | int = 0.0, age: int = 0,
+                    growth: float = 0.1, color: str = '') -> None:
         self._plant_data[name] = {'height': float(height), 'age': age,
                                   'growth': growth,
                                   'color': color, 'bloom': False}
@@ -107,18 +114,19 @@ class Flower(Plant):
 
     def show(self, name: str) -> None:
         super().show(name)
-        print(f"Color: {self._plant_data[name]['color']}")
+        print(f" Color: {self._plant_data[name]['color']}")
         if self._plant_data[name]['bloom']:
-            print(f"{name} is blooming beautifully!")
+            print(f" {name} is blooming beautifully!")
         else:
-            print(f"{name} has not bloomed yet")
+            print(f" {name} has not bloomed yet")
 
 
 class Tree(Plant):
-    def __int__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def creat_plant(self, name: str, height: float | int =0.0, age: int =0, growth: float =0.1, trunk_diameter: float =0.0) -> None:
+    def creat_plant(self, name: str, height: float | int = 0.0, age: int = 0,
+                    growth: float = 0.1, trunk_diameter: float = 0.0) -> None:
         self._plant_data[name] = {'height': float(height), 'age': age,
                                   'growth': growth,
                                   'trunk_diameter': float(trunk_diameter)}
@@ -130,16 +138,17 @@ class Tree(Plant):
 
     def show(self, name: str) -> None:
         super().show(name)
-        print(f"Trunk diameter: {self._plant_data[name]['trunk_diameter']}cm")
+        print(f" Trunk diameter: {self._plant_data[name]['trunk_diameter']}cm")
 
 
 class Vegertable(Plant):
-    def __int__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self._plant_data: dict[str, dict[str, float | int | str]] = {}
+        self._plant_data: dict[str, dict[str, float | int | str | bool]] = {}
 
-    def creat_plant(self, name: str, height: float | int =0.0, age: int =0, growth: float =0.1,
-                    harvest_season: str ='', nutri_value: int =0) -> None:
+    def creat_plant(self, name: str, height: float | int = 0.0, age: int = 0,
+                    growth: float = 0.1, harvest_season: str = '',
+                    nutri_value: int = 0) -> None:
         self._plant_data[name] = {'height': float(height), 'age': age,
                                   'growth': growth,
                                   'harvest_season': harvest_season,
@@ -147,12 +156,16 @@ class Vegertable(Plant):
 
     def grow(self, name: str) -> None:
         super().grow(name)
-        self._plant_data[name]['nutritional_value'] += 1
+        nutritional_value = self._plant_data[name]['nutritional_value']
+        if isinstance(nutritional_value, (int, float)):
+            self._plant_data[name]['nutritional_value'] = nutritional_value + 1
+        else:
+            self._plant_data[name]['nutritional_value'] = 0
 
     def show(self, name: str) -> None:
         super().show(name)
-        print(f"Harvest season: {self._plant_data[name]['harvest_season']}\n"
-              f"Nutritional value: "
+        print(f" Harvest season: {self._plant_data[name]['harvest_season']}\n"
+              f" Nutritional value: "
               f"{self._plant_data[name]['nutritional_value']}")
 
 
@@ -163,6 +176,7 @@ if __name__ == "__main__":
     flower = Flower()
     flower.creat_plant('Rose', 15, 10, color='red')
     flower.show('Rose')
+    # asking the rose to bloom
     flower.bloom('Rose')
     flower.show('Rose')
     print("")
@@ -171,6 +185,7 @@ if __name__ == "__main__":
     tree = Tree()
     tree.creat_plant('Oak', 200, 365, trunk_diameter=5)
     tree.show('Oak')
+    # asking the oak to produce shade
     tree.produce_shade('Oak')
     print("")
 
@@ -178,6 +193,7 @@ if __name__ == "__main__":
     vege = Vegertable()
     vege.creat_plant('Tomato', 5, 10, 2.1, 'April', 0)
     vege.show('Tomato')
+    # make tomato grow and age for 20 days
     for i in range(20):
         vege.grow('Tomato')
     vege.show('Tomato')
