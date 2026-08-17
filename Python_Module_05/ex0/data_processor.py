@@ -123,6 +123,7 @@ class LogProcessor(DataProcessor):
         if isinstance(data, dict):
             for k, v in data.items():
                 if not isinstance(k, str) or not isinstance(v, str):
+                    print(" Got exception: Improper numeric data")
                     return None
             print(f" Processing data: {data}")
             values = [v for v in data.values()]
@@ -133,8 +134,10 @@ class LogProcessor(DataProcessor):
                 if isinstance(item, dict):
                     for k, v in item.items():
                         if not isinstance(k, str) or not isinstance(v, str):
+                            print(" Got exception: Improper numeric data")
                             return None
                 else:
+                    print(" Got exception: Improper numeric data")
                     return None
             print(f" Processing data: {data}")
             for item in data:
@@ -142,8 +145,8 @@ class LogProcessor(DataProcessor):
                 self.new_data.append((self.rank, ": ".join(values)))
                 self.rank += 1
         else:
-            print(False)
-            return False
+            print(" Got exception: Improper numeric data")
+            return None
 
 
 if __name__ == "__main__":
