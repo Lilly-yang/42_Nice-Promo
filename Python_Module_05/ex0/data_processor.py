@@ -3,9 +3,10 @@ import typing
 
 
 class DataProcessor(abc.ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.new_data = []
+        self.new_data: list[tuple[int, str]] = []
+        self.rank = 0
 
     @abc.abstractmethod
     def validate(self, data: typing.Any) -> bool:
@@ -40,14 +41,17 @@ class NumericProcessor(DataProcessor):
     def ingest(self, data: int | float | list[int | float]) -> None:
         if isinstance(data, (int, float)):
             print(f" Processing data: {data}")
-            self.new_data.append(str(data))
+            self.new_data.append((self.rank, str(data)))
+            self.rank += 1
         elif isinstance(data, list):
             for item in data:
                 if not isinstance(item, (int, float)):
                     print(" Got exception: Improper numeric data")
                     return None
             print(f" Processing data: {data}")
-            self.new_data.extend([str(item) for item in data])
+            for item in data:
+                self.new_data.append((self.rank, str(item)))
+                self.rank += 1
         else:
             print(" Got exception: Improper numeric data")
             return None
@@ -73,14 +77,17 @@ class TextProcessor(DataProcessor):
     def ingest(self, data: str | list[str]) -> None:
         if isinstance(data, str):
             print(f" Processing data: {data}")
-            self.new_data.append(data)
+            self.new_data.append((self.rank, data))
+            self.rank += 1
         elif isinstance(data, list):
             for item in data:
                 if not isinstance(item, str):
                     print(" Got exception: Improper numeric data")
                     return None
             print(f" Processing data: {data}")
-            self.new_data.extend(data)
+            for item in data:
+                self.new_data.append((self.rank, item))
+                self.rank += 1
         else:
             print(" Got exception: Improper numeric data")
             return None
@@ -119,7 +126,8 @@ class LogProcessor(DataProcessor):
                     return None
             print(f" Processing data: {data}")
             values = [v for v in data.values()]
-            self.new_data.append(": ".join(values))
+            self.new_data.append((self.rank, ": ".join(values)))
+            self.rank += 1
         elif isinstance(data, list):
             for item in data:
                 if isinstance(item, dict):
@@ -131,7 +139,8 @@ class LogProcessor(DataProcessor):
             print(f" Processing data: {data}")
             for item in data:
                 values = [v for v in item.values()]
-                self.new_data.append(": ".join(values))
+                self.new_data.append((self.rank, ": ".join(values)))
+                self.rank += 1
         else:
             print(False)
             return False
@@ -151,7 +160,8 @@ if __name__ == "__main__":
     number_processor.ingest([1, 2, 3, 4, 5])
     print(" Extracting 3 values...")
     for i in range(3):
-        print(f" Numeric value {i}: {number_processor.output()}")
+        rank, data = number_processor.output()
+        print(f" Numeric value {rank}: {data}")
 
     print("\nTesting Text Processor...")
     string_processor = TextProcessor()
@@ -159,7 +169,8 @@ if __name__ == "__main__":
     string_processor.ingest(['Hello', 'Nexus', 'World'])
     print(" Extracting 1 values...")
     for i in range(1):
-        print(f" Text value {i}: {string_processor.output()}")
+        rank, data = string_processor.output()
+        print(f" Numeric value {rank}: {data}")
 
     print("\nTesting Log Processor...")
     dict_processor = LogProcessor()
@@ -170,4 +181,5 @@ if __name__ == "__main__":
         ])
     print(" Extracting 2 values...")
     for i in range(2):
-        print(f" Text value {i}: {dict_processor.output()}")
+        rank, data = dict_processor.output()
+        print(f" Numeric value {rank}: {data}")
