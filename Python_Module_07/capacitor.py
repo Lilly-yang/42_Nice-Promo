@@ -1,0 +1,33 @@
+from ex1 import HealingCreatureFactory, TransformCreatureFactory
+
+
+heal_factory = HealingCreatureFactory()
+trans_factory = TransformCreatureFactory()
+
+print("Testing Creature with healing capability")
+print(" base:")
+heal_creature = heal_factory.create_base()
+print(f"{heal_creature.describe()}")
+print(f"{heal_creature.attack()}")
+print(f"{heal_creature.heal()}")
+print(" evolved")
+evelved_heal_creature = heal_factory.create_evolved()
+print(f"{evelved_heal_creature.describe()}")
+print(f"{evelved_heal_creature.attack()}")
+print(f"{evelved_heal_creature.heal()}")
+
+print("\nTesting Creature with transform capability")
+print(" base:")
+trans_creature = trans_factory.create_base()
+print(f"{trans_creature.describe()}")
+print(f"{trans_creature.attack()}")
+print(f"{trans_creature.transform()}")
+print(f"{trans_creature.attack()}")
+print(f"{trans_creature.revert()}")
+print(" evolved")
+evelved_trans_creature = trans_factory.create_evolved()
+print(f"{evelved_trans_creature.describe()}")
+print(f"{evelved_trans_creature.attack()}")
+print(f"{evelved_trans_creature.transform()}")
+print(f"{evelved_trans_creature.attack()}")
+print(f"{evelved_trans_creature.revert()}")
