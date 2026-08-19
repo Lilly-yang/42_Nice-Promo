@@ -1,0 +1,9 @@
+python -m venv matrix_env
+source matrix_env/bin/activate
+python deactive
+
+pip install -r requirements.txt
+
+poetry install
+
+mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
