@@ -7,6 +7,7 @@ get_next_line/gnlTester/
 get_next_line/Moumounator_gnl/
 .vscode/settings.json
 .mypy_cache/
+__pycache__/
 
 poetry.lock
 matrix_env
