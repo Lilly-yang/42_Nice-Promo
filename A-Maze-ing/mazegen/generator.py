@@ -1,24 +1,33 @@
-import numpy as np
-import copy
+import random
+import sys
 
 
 class MazeGenerator:
-    def __init__(self, width, height, seed):
-        """
-        width  → maze width
-        height → maze height
-        seed   → random seed
-        """
+    def __init__(self,
+                 width: int,
+                 height: int,
+                 entry: tuple,
+                 exit: tuple,
+                 perfect: bool = True,
+                 output_file: str = "maze.txt",
+                 seed: int | None = None,
+                 icon42: bool = True) -> None:
         self.width = width
         self.height = height
+        self.entry = entry
+        self.exit = exit
+        self.perfect = perfect
+        self.output_file = output_file
         self.seed = seed
-        self.creat_maze()
+        self.icon42 = icon42
+        self.solution = ""
+        self.icon_cell: set[tuple] = set()
 
-    def creat_maze(self):
+    def _init_maze(self) -> None:
         self.maze = []
-        for _ in range(self.height):
+        for _ in range(0, self.height):
             row_tmp = []
-            for _ in range(self.width):
+            for _ in range(0, self.width):
                 cell = {
                     "N": 1,
                     "E": 1,
@@ -28,29 +37,233 @@ class MazeGenerator:
                 row_tmp.append(cell)
             self.maze.append(row_tmp)
 
-    def _get_neighbors(self, x, y):
-        nbs = []
-        if x - 1 >= 0:
-            nbs.append((x-1, y))
+        print(f"maze initiated: width - {self.width}, height - {self.height}")
 
-        if x + 1 < self.width:
-            nbs.append((x+1, y))
+        if self.width < 9 or self.height < 7:
+            self.icon42 = False
+            print("Error: 42 pattern is omitted because maze is too small!")
 
-        if y - 1 >= 0:
-            nbs.append((x, y-1))
+        if self.icon42:
+            w = int(self.width / 2) - 3
+            h = int(self.height / 2) - 2
+            self._get_icon_cell(w, h)
 
-        if y + 1 < self.height:
-            nbs.append((x, y+1))
+        if self.entry in self.icon_cell or self.exit in self.icon_cell:
+            self.icon42 = False
+            print("Error: 42 pattern is omitter "
+                  "because cell is occupied with entry or exit!")
+
+    def _get_icon_cell(self, offset_w: int, offset_h: int) -> None:
+        init_icon_cell = [(0, 0), (0, 1), (0, 2),
+                          (1, 2),
+                          (2, 2), (2, 3), (2, 4),
+                          (4, 0), (4, 2), (4, 3), (4, 4),
+                          (5, 0), (5, 2), (5, 4),
+                          (6, 0), (6, 1), (6, 2), (6, 4)]
+
+        self.icon_cell = set(
+            [(w+offset_w, h+offset_h) for w, h in init_icon_cell]
+            )
+
+    def generate_maze(self) -> list:
+        self._init_maze()
+        self.rng = random.Random(self.seed)
+        print("maze generating...")
+        visited = set()
+        stack = []
+
+        start = self.entry
+        stack.append(start)
+        visited.add(start)
+        while True:
+            neighbors = self._get_neighbors(start[0], start[1])
+            valid_nb = neighbors - visited
+            if valid_nb:
+                next_cell = self.rng.choice(list(valid_nb))
+                self._remove_wall(start, next_cell)
+                start = next_cell
+                stack.append(start)
+                visited.add(start)
+            else:
+                stack.pop()
+                if stack:
+                    start = stack[-1]
+                else:
+                    break
+
+        print("---*perfect maze generated*---")
+
+        if not self.perfect:
+            print("non-perfect maze...")
+            self._loop_gen()
+            print("---non-perfect maze generated---")
+
+        return self.maze
+
+    def _get_neighbors(self, w: int, h: int) -> set:
+        nbs = set()
+        if w - 1 >= 0:
+            nbs.add((w-1, h))
+
+        if w + 1 < self.width:
+            nbs.add((w+1, h))
+
+        if h - 1 >= 0:
+            nbs.add((w, h-1))
+
+        if h + 1 < self.height:
+            nbs.add((w, h+1))
+
+        return nbs - self.icon_cell
+
+    def _remove_wall(self, str: tuple, nxt: tuple) -> None:
+        str_w, str_h = str
+        end_w, end_h = nxt
+
+        if str_h == end_h:
+            if str_w > end_w:
+                self.maze[str_h][str_w]["W"] = 0
+                self.maze[end_h][end_w]["E"] = 0
+            else:
+                self.maze[str_h][str_w]["E"] = 0
+                self.maze[end_h][end_w]["W"] = 0
+
+        if str_w == end_w:
+            if str_h > end_h:
+                self.maze[str_h][str_w]["N"] = 0
+                self.maze[end_h][end_w]["S"] = 0
+            else:
+                self.maze[str_h][str_w]["S"] = 0
+                self.maze[end_h][end_w]["N"] = 0
+
+    def _loop_gen(self) -> None:
+        n = self.width * self.height // 10 + 1
+        candidate = []
+
+        for h in range(0, self.height):
+            for w in range(0, self.width):
+                if self.maze[h][w]["S"] and h < self.height - 1:
+                    candidate.append((h, w, "S"))
+                if self.maze[h][w]["E"] and w < self.width - 1:
+                    candidate.append((h, w, "E"))
+
+        if n > len(candidate):
+            n = len(candidate)
+
+        for _ in range(n):
+            h, w, drc = self.rng.choice(candidate)
+            self.maze[h][w][drc] = 0
+            if drc == "S":
+                self.maze[h+1][w]["N"] = 0
+
+            if drc == "E":
+                self.maze[h][w+1]["W"] = 0
+
+            candidate.remove((h, w, drc))
+
+    def solve(self) -> list:
+        print("solving maze...")
+        visited = set()
+        stack = []
+        # solution = []
+
+        start = self.entry
+        stack.append(start)
+        visited.add(start)
+        while True:
+            if start == self.exit:
+                # self.stack = stack
+                # print(f"maze solved: {''.join(solution[:10])}", end="")
+                # if len(solution) > 10:
+                #     print("...")
+                return stack
+
+            neighbors = self._get_open_neighbors(start[0], start[1])
+            valid_nb = neighbors - visited
+            if valid_nb:
+                start = self.rng.choice(list(valid_nb))
+                # solution.append(self._get_direction(start, next_cell))
+                # start = next_cell
+                stack.append(start)
+                visited.add(start)
+            else:
+                stack.pop()
+                # solution.pop()
+                if stack:
+                    start = stack[-1]
+                else:
+                    break
+
+        print("Solve maze failed!")
+        sys.exit(1)
+        return []
+
+    def _get_open_neighbors(self, w: int, h: int) -> set:
+        nbs = set()
+
+        if not self.maze[h][w]["N"] and h > 0:
+            nbs.add((w, h-1))
+
+        if not self.maze[h][w]["S"] and h < self.height-1:
+            nbs.add((w, h+1))
+
+        if not self.maze[h][w]["W"] and w > 0:
+            nbs.add((w-1, h))
+
+        if not self.maze[h][w]["E"] and w < self.width-1:
+            nbs.add((w+1, h))
 
         return nbs
 
+    def _get_direction(self, cell_list: list) -> str:
+        direction = ""
+        for i in range(0, len(cell_list)-1):
+            str_w, str_h = cell_list[i]
+            end_w, end_h = cell_list[i+1]
 
-    def generate(self):
-        self.maze = 
+            if str_h == end_h:
+                if str_w > end_w:
+                    direction += "W"
+                else:
+                    direction += "E"
 
-    def get_maze():
-        return self.maze
+            if str_w == end_w:
+                if str_h > end_h:
+                    direction += "N"
+                else:
+                    direction += "S"
+        print(f"solution: {direction[:10]}", end="")
+        if len(direction) > 10:
+            print("...")
+        return direction
 
-    def save_structe():
+    def output_maze(self) -> None:
+        from pathlib import Path
+        import os
+        current_dir = Path(__file__).resolve().parent.parent
+        output_path = os.path.join(current_dir, self.output_file)
+        with open(output_path, "w") as f:
+            for h in range(self.height):
+                line = ""
+                for w in range(self.width):
+                    line += self._direction_hexadecimal(self.maze[h][w])
+                line += '\n'
+                f.write(line)
 
-    def get_solution():
+            f.write('\n')
+            f.write(str(self.entry[0])+","+str(self.entry[1])+"\n")
+            f.write(str(self.exit[0])+","+str(self.exit[1])+"\n")
+            if self.solution == "":
+                solution = self.solve()
+            f.write(self._get_direction(solution)+"\n")
+
+            f.close()
+        print(f"maze saved in: {output_path}")
+
+    def _direction_hexadecimal(self, cell: dict) -> str:
+        dec_cell = 0
+        for ind, drc in enumerate(["W", "S", "E", "N"]):
+            dec_cell += cell[drc] * (2 ** ind)
+
+        hex = "0123456789ABCDEF"
+        return hex[dec_cell]
