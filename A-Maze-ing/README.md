@@ -156,23 +156,26 @@ the program first generates a perfect maze and then randomly removes additional 
 
 This introduces loops and creates multiple possible paths through the maze.
 
-# Reusable code
-The maze generation logic is separated from the visualization code and packaged as a reusable Python library.
+# Reusable `mazegen` Package
+The maze generation logic is implemented as a standalone
+and reusable Python package called `mazegen`.
 
-The package is distributed as:
-```
-mazegen-1.0.0-py3-none-any.whl
-```
-This allows the maze generator to be reused independently from the main visualization program.
+The package provides:
+
+- Custom maze dimensions
+- Custom entry and exit points
+- Optional seed for reproducible generation
+- Access to the generated maze structure
+- Access to a solution path
 
 ### Installation
 
-Install the wheel package with:
 ```bash
 pip install mazegen-1.0.0-py3-none-any.whl
 ```
 
-### Example
+### Basic Usage
+
 ```python
 from mazegen import MazeGenerator
 
@@ -183,7 +186,9 @@ solution = generator.solve()
 
 generator.output_maze()
 ```
-The generated maze and its solution can then be used by another application or visualization system.
+
+The generated maze structure is available through maze,
+and the solution path is available through solution.
 
 # Team
 *lyang*: Project planning and scheduling. Code and documentation. \
