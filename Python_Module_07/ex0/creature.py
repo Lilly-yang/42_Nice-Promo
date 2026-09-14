@@ -6,9 +6,8 @@ class Creature(abc.ABC):
     def attack(self) -> str:
         pass
 
-    @abc.abstractmethod
     def describe(self) -> str:
-        pass
+        return "[name] is a [type] type Creature"
 
 
 class Flameling(Creature):
